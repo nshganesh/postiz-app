@@ -112,3 +112,11 @@ This repository's source code is available under the [Apache 2.0 License](LICENS
 </p>
 
 
+`npm run dev`
+`npx prisma studio` inside nestjs-libraries
+`docker compose -f "docker-compose.dev.yaml" up`
+
+Deploy:
+  `docker setup`
+
+`Resend Setup, Stripe setup, Social Media Setup, Cloudflare Setup, OpenAI Setup`

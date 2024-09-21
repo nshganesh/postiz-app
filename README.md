@@ -111,6 +111,7 @@ This repository's source code is available under the [Apache 2.0 License](LICENS
   <a href="https://www.g2.com/products/postiz/take_survey" target="blank"><img alt="g2" src="https://github.com/user-attachments/assets/892cb74c-0b49-4589-b2f5-fbdbf7a98f66" /></a>
 </p>
 
+node: 20.9.0
 
 `npm run dev`
 `npx prisma studio` inside nestjs-libraries

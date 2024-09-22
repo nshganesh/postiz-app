@@ -18,8 +18,26 @@ jobs:
       with:
         node-version: '20.9.0'
 
+    # Add caching for npm dependencies
+    - name: Cache npm dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-node-
+
     - name: Install dependencies
       run: npm ci
+
+    # Add caching for build output
+    - name: Cache build output
+      uses: actions/cache@v3
+      with:
+        path: .next
+        key: ${{ runner.OS }}-next-build-${{ hashFiles('**/*.[jt]s', '**/*.[jt]sx') }}
+        restore-keys: |
+          ${{ runner.OS }}-next-build-
 
     - name: Build project
       run: npm run build
@@ -37,7 +55,6 @@ jobs:
           ./ ${USER}@${HOST}:/var/www/magic/
         ssh -o StrictHostKeyChecking=no -i private_key ${USER}@${HOST} << EOF
           cd /var/www/magic
-          npm ci --production
           pm2 restart magic  # Assuming your PM2 app is named 'magic'
         EOF
 

@@ -17,6 +17,7 @@ async function bootstrap() {
       exposedHeaders: ['reload', 'onboarding', 'activate'],
       origin: [
         process.env.FRONTEND_URL,
+        'http://134.209.151.178',
         ...(process.env.MAIN_URL ? [process.env.MAIN_URL] : []),
       ],
     },

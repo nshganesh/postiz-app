@@ -34,6 +34,14 @@ jobs:
       run: |
         echo "${{ secrets.ENV_FILE_CONTENTS }}" > .env
 
+    - name: Verify .env file
+      run: |
+        echo "Checking .env file contents:"
+        grep -v -E "^(API_KEY|SECRET|PASSWORD|TOKEN)=" .env || echo "No non-sensitive variables found"
+        echo "Checking for specific variables:"
+        grep -q "^NODE_ENV=" .env && echo "NODE_ENV is set" || echo "NODE_ENV is not set"
+        grep -q "^PORT=" .env && echo "PORT is set" || echo "PORT is not set"
+
     # Add caching for build output
     - name: Cache build output
       uses: actions/cache@v3

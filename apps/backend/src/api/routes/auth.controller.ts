@@ -80,13 +80,22 @@ export class AuthController {
         getOrgFromCookie
       );
 
-      response.cookie('auth', jwt, {
+      console.log({
+        jwt,
         domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
-        secure: true,
-        httpOnly: true,
-        sameSite: 'none',
-        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
       });
+
+      try {
+        response.cookie('auth', jwt, {
+          domain: getCookieUrlFromDomain(process.env.FRONTEND_URL!),
+          secure: true,
+          httpOnly: true,
+          sameSite: 'none',
+          expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+        });
+      } catch (e) {
+        console.log({ e });
+      }
 
       if (typeof addedOrg !== 'boolean' && addedOrg?.organizationId) {
         response.cookie('showorg', addedOrg.organizationId, {

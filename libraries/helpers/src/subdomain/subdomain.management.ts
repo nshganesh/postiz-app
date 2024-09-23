@@ -27,6 +27,7 @@ export function removeSubdomain(domain: string) {
 
 
 export function getCookieUrlFromDomain(domain: string) {
+    console.log({ domain, url: process.env.FRONTEND_URL!, url2: process.env.FRONTEND_URL });
     const url = removeSubdomain(domain);
     const urlObj = new URL(url);
     if (!ipRegex.test(domain)) {

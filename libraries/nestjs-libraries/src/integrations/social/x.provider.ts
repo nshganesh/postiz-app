@@ -54,21 +54,29 @@ export class XProvider extends SocialAbstract implements SocialProvider {
       appKey: process.env.X_API_KEY!,
       appSecret: process.env.X_API_SECRET!,
     });
-    const { url, oauth_token, oauth_token_secret } =
-      await client.generateAuthLink(
-        process.env.FRONTEND_URL +
-          `/integrations/social/x${refresh ? `?refresh=${refresh}` : ''}`,
-        {
-          authAccessType: 'write',
-          linkMode: 'authenticate',
-          forceLogin: false,
-        }
-      );
-    return {
-      url,
-      codeVerifier: oauth_token + ':' + oauth_token_secret,
-      state: oauth_token,
-    };
+
+    try {
+      const { url, oauth_token, oauth_token_secret } =
+        await client.generateAuthLink(
+          process.env.FRONTEND_URL +
+            `/integrations/social/x${refresh ? `?refresh=${refresh}` : ''}`,
+          {
+            authAccessType: 'write',
+            linkMode: 'authenticate',
+            forceLogin: false,
+          }
+        );
+
+      console.log({ url, oauth_token, oauth_token_secret });
+      return {
+        url,
+        codeVerifier: oauth_token + ':' + oauth_token_secret,
+        state: oauth_token,
+      };
+    } catch (error) {
+      console.error('Error generating auth link:', error);
+      throw error; // Re-throw the error if you want it to propagate
+    }
   }
 
   async authenticate(params: { code: string; codeVerifier: string }) {

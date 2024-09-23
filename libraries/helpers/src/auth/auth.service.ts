@@ -11,11 +11,9 @@ export class AuthService {
     return compareSync(password, hash);
   }
   static signJWT(value: object) {
-    console.log({ secret: process.env.JWT_SECRET });
     return sign(value, process.env.JWT_SECRET!);
   }
   static verifyJWT(token: string) {
-    console.log({ secret: process.env.JWT_SECRET });
     return verify(token, process.env.JWT_SECRET!);
   }
 
@@ -24,7 +22,6 @@ export class AuthService {
     const algorithm = 'aes-256-cbc';
 
     // create a cipher object
-    console.log({ secret: process.env.JWT_SECRET });
     const cipher = crypto.createCipher(algorithm, process.env.JWT_SECRET);
 
     // encrypt the plain text
@@ -36,7 +33,6 @@ export class AuthService {
 
   static fixedDecryption(hash: string) {
     const algorithm = 'aes-256-cbc';
-    console.log({ secret: process.env.JWT_SECRET });
     const decipher = crypto.createDecipher(algorithm, process.env.JWT_SECRET);
 
     // decrypt the encrypted text

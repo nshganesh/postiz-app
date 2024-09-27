@@ -4,7 +4,7 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Request, Response } from 'express';
 
-const { CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_ACCESS_KEY, CLOUDFLARE_SECRET_ACCESS_KEY, CLOUDFLARE_BUCKETNAME, CLOUDFLARE_BUCKET_URL } =
+const { CLOUDFLARE_ACCOUNT_ID, CLOUDFLARE_ACCESS_KEY, CLOUDFLARE_SECRET_ACCESS_KEY, CLOUDFLARE_BUCKETNAME, CLOUDFLARE_WORKER_URL } =
   process.env;
 
 const R2 = new S3Client({
@@ -50,7 +50,7 @@ export async function simpleUpload(data: Buffer, key: string, contentType: strin
   const command = new PutObjectCommand({ ...params });
   await R2.send(command);
 
-  return CLOUDFLARE_BUCKET_URL + '/' + key;
+  return CLOUDFLARE_WORKER_URL + '/' + key;
 }
 
 export async function createMultipartUpload(
@@ -155,7 +155,8 @@ export async function completeMultipartUpload(
       MultipartUpload: { Parts: parts },
     });
     const response = await R2.send(command);
-    response.Location = process.env.CLOUDFLARE_BUCKET_URL + '/' + response?.Location?.split('/').at(-1);
+
+    response.Location = process.env.CLOUDFLARE_WORKER_URL + '/' + decodeURIComponent(response?.Location?.split('/').at(-1) ?? '');
     return response;
   } catch (err) {
     console.log('Error', err);
